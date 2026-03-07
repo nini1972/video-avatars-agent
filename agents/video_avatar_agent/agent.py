@@ -74,7 +74,7 @@ async def before_model_callback(
 
 root_agent = LlmAgent(
     name="root_agent",
-    model="gemini-2.5-pro",
+    model="gemini-3.1-pro-preview",
     instruction="""
     You are a video generation agent for avatar-based training videos. You orchestrate the creation of videos.
     Your input is a character description, a script, and a set of views of the character.

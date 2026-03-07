@@ -49,7 +49,7 @@ using [Vertex AI Agent Engine Sessions Service](https://cloud.google.com/vertex-
 `MediaGenerators` MCP Server with 2 tools:
 
 1. `generate_video` - uses [Veo 3.1](https://console.cloud.google.com/vertex-ai/publishers/google/model-garden/veo-3.1-generate-preview?utm_campaign=CDR_0xc245fc42_default_b456742732&utm_medium=external&utm_source=event) model to generate videos. It can use start and frame in addition to the text prompt.
-2. `generate_image` - uses [Gemini 2.5 Flash Image](https://cloud.google.com/vertex-ai/generative-ai/docs/models/gemini/2-5-flash-image?utm_campaign=CDR_0xc245fc42_default_b456742732&utm_medium=external&utm_source=event) (Nano Banana 🍌) to generate images.
+2. `generate_image` - uses [Gemini 3.1 Flash Image](https://docs.cloud.google.com/vertex-ai/generative-ai/docs/models/gemini/3-1-flash-image) (Nano Banana2 🍌) to generate images.
    It can use source image as a reference. This tool is not used by the repo's agent.
 
 ## Prerequisites

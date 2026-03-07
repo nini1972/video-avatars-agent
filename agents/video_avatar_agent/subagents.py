@@ -112,7 +112,7 @@ async def before_model_callback(
         )
 
 script_sequencer_agent = Agent(
-    model="gemini-2.5-pro",
+    model="gemini-3.1-pro-preview",
     name="script_sequencer_agent",
     description="""Script Sequencer Agent.
     Input:
@@ -122,7 +122,7 @@ script_sequencer_agent = Agent(
 )
 
 video_agent = Agent(
-    model="gemini-2.5-pro",
+    model="gemini-3.1-pro-preview",
     name="video_agent",
     description="""Video Agent.
 

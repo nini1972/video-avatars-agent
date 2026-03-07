@@ -32,7 +32,7 @@ async def generate_image(
     source_image_gsc_uri: Optional[str] = None,
     aspect_ratio: Literal["16:9", "9:16"] = "16:9",
 ) -> MediaAsset:
-    """Generates an image using Gemini 2.5 Flash Image model (aka Nano Banana).
+    """Generates an image using Gemini 3.1 Flash Image model (aka Nano Banana2).
     Returns a MediaAsset object with the GCS URI of the generated image or an error text.
 
     Args:
@@ -67,7 +67,7 @@ async def generate_image(
     asset = MediaAsset(uri="")
     for _ in range (0, MAX_RETRIES):
         response = genai_client.models.generate_content(
-            model="gemini-2.5-flash-image",
+            model="gemini-3.1-flash-image-preview",
             contents=[content],
             config=types.GenerateContentConfig(
                 response_modalities=["IMAGE"],

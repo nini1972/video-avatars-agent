@@ -1,4 +1,4 @@
-# AI Agent for Long-form Educational Videos
+# Multi-Agent Team for Creating Long-form Videos
 
 This repository demonstrates how to build a long-form video generation agent using the [Google Agent Development Kit (ADK)](https://google.github.io/adk-docs/), [Gemini 3.1 Flash Image(Nano Banana2)](https://docs.cloud.google.com/vertex-ai/generative-ai/docs/models/gemini/3-1-flash-image), and [Veo 3.1](https://console.cloud.google.com/vertex-ai/publishers/google/model-garden/veo-3.1-generate-preview?utm_campaign=CDR_0xc245fc42_default_b456742732&utm_medium=external&utm_source=event).
 

@@ -17,11 +17,14 @@ class IdentityTokenHeaderProvider:
     def __init__(self, remote_service_url: str):
         parsed_url = urlparse(remote_service_url)
         self.root_url = f"{parsed_url.scheme}://{parsed_url.netloc}"
+        self.host = parsed_url.hostname or ""
         self.outside_cloud = False # at first, assume we run in Cloud
         self.session = None
 
     def __call__(self, context: ReadonlyContext) -> Dict[str, str]:
         headers = {}
+        if self.host in {"localhost", "127.0.0.1", "0.0.0.0"}:
+            return headers
         if not self.outside_cloud:
             try:
                 if not self.session:

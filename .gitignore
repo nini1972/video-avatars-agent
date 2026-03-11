@@ -201,3 +201,7 @@ my_env.tfvars
 videos/
 assets/.old
 assets/raw
+
+
+#Ignore vscode AI rules
+.github\instructions\codacy.instructions.md

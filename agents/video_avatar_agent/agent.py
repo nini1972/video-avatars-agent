@@ -26,6 +26,7 @@ from google.adk.tools import AgentTool
 
 from subagents import (
     concat_agent,
+    mcp_toolset_generate_image,
     script_sequencer_agent,
     script_writer_agent,
     video_agent,
@@ -43,7 +44,7 @@ from utils.storage_utils import (
 
 _, project_id = google.auth.default()
 os.environ.setdefault("GOOGLE_CLOUD_PROJECT", project_id)  # type: ignore
-os.environ.setdefault("GOOGLE_CLOUD_LOCATION", "global")
+os.environ.setdefault("GOOGLE_CLOUD_LOCATION", "us-central1")
 os.environ.setdefault("GOOGLE_GENAI_USE_VERTEXAI", "True")
 
 CHARACTER_PROFILE_PATTERN = re.compile(
@@ -261,6 +262,7 @@ root_agent = LlmAgent(
         AgentTool(script_sequencer_agent),
         AgentTool(video_agent),
         AgentTool(concat_agent),
+        mcp_toolset_generate_image,
     ],
     before_model_callback=before_model_callback,
 )

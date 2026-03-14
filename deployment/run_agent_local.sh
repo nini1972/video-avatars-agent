@@ -25,8 +25,4 @@ if [[ "${AGENT_ENGINE_ID}" == "" ]]; then
     echo "AGENT_ENGINE_ID=\"${AGENT_ENGINE_ID}\"" >> ".env"
 fi
 
-# Agent Engine session service requires a real region (not "global");
-# override GOOGLE_CLOUD_LOCATION with GOOGLE_CLOUD_REGION for this process.
-export GOOGLE_CLOUD_LOCATION="${GOOGLE_CLOUD_REGION}"
-
 adk web --port 8081 --artifact_service_uri gs://${AI_ASSETS_BUCKET} --session_service_uri agentengine://${AGENT_ENGINE_ID} ./agents

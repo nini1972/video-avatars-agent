@@ -23,4 +23,8 @@ if (-not (Test-Path $pythonExe)) {
     $pythonExe = "python"
 }
 
+# Image/video generation requires "global" location; override GOOGLE_CLOUD_LOCATION
+# with GOOGLE_CLOUD_REGION for this process (ADK agents use us-central1).
+$env:GOOGLE_CLOUD_LOCATION = $env:GOOGLE_CLOUD_REGION
+
 & $pythonExe "mcp/main.py"

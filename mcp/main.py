@@ -58,4 +58,4 @@ if __name__ == "__main__":
     _initialize_console_logging()
     port = int(os.getenv("PORT", 8080))
     host = os.getenv("HOST", "0.0.0.0")
-    mcp.run(transport="http", host=host, port=port)
+    mcp.run(transport="sse", host=host, port=port)

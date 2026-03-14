@@ -32,6 +32,7 @@ IMAGE_MODELS = [
     "gemini-2.0-flash-preview-image-generation",
 ]
 
+print("DEBUG: nano_banana loaded from:", __file__)
 
 def _build_content(prompt: str, source_image_gcs_uris: list[str]) -> types.Content:
     """Builds a multimodal Content object: optional source images + text prompt."""
@@ -65,10 +66,8 @@ def _generate_with_model_fallback(
         ],
         image_config=types.ImageConfig(
             aspect_ratio=aspect_ratio,
-            image_size="1K",
-            output_mime_type="image/png",
         ),
-        thinking_config=types.ThinkingConfig(thinking_level="HIGH"),
+        thinking_config=types.ThinkingConfig(thinking_budget=-1),
     )
 
     for model_name in IMAGE_MODELS:
@@ -179,5 +178,10 @@ async def generate_image(
             "Image URL: %s",
             asset.uri.replace("gs://", AUTHORIZED_URI),
         )
+    print("DEBUG: generate_image returning:", asset)
+    return {
+        "uri": asset.uri,
+        "error": asset.error,
+    }
 
-    return asset
+

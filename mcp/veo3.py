@@ -114,12 +114,12 @@ async def generate_video(
                 continue
             result_media.uri = video.video.uri
             logging.info(
-                f"[{invocation}] Video URL: {result_media.uri.replace("gs://", AUTHORIZED_URI)}"
+                f"[{invocation}] Video URL: {result_media.uri.replace('gs://', AUTHORIZED_URI)}"
             )
             break
     logging.info(
         f"[{invocation}] Video Generation result:\n{result_media.model_dump_json(indent=2)}"
     )
-    return result_media
+    return {"uri": result_media.uri, "error": result_media.error}
 
 

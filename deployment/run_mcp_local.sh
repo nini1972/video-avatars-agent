@@ -20,4 +20,8 @@ cd "${SCRIPT_DIR}/.."
 
 source ".env"
 
+# Image/video generation requires "global" location; override GOOGLE_CLOUD_LOCATION
+# with GOOGLE_CLOUD_REGION for this process (ADK agents use us-central1).
+export GOOGLE_CLOUD_LOCATION="${GOOGLE_CLOUD_REGION}"
+
 python3 "mcp/main.py"

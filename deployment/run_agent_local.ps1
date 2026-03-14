@@ -33,8 +33,4 @@ if ([string]::IsNullOrWhiteSpace($env:AGENT_ENGINE_ID)) {
     Add-Content -Path $envFile -Value "AGENT_ENGINE_ID=\"$engineId\""
 }
 
-# Agent Engine session service requires a real region (not "global");
-# override GOOGLE_CLOUD_LOCATION with GOOGLE_CLOUD_REGION for this process.
-$env:GOOGLE_CLOUD_LOCATION = $env:GOOGLE_CLOUD_REGION
-
 & adk web --port 8081 --artifact_service_uri "gs://$env:AI_ASSETS_BUCKET" --session_service_uri "agentengine://$env:AGENT_ENGINE_ID" ./agents

@@ -20,6 +20,7 @@ import sys
 from fastmcp import FastMCP
 from dotenv import load_dotenv
 
+from concat_videos import concatenate_videos
 from nano_banana import generate_image
 from veo3 import generate_video
 
@@ -46,7 +47,7 @@ def _initialize_console_logging(min_level: int = logging.INFO):
     )
 
 
-tools = [generate_image, generate_video]
+tools = [generate_image, generate_video, concatenate_videos]
 mcp = FastMCP(
     name="MediaGenerators",
     tools=tools

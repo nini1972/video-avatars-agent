@@ -21,7 +21,7 @@ cd "${SCRIPT_DIR}/.."
 source ".env"
 
 if [[ "${AGENT_ENGINE_ID}" == "" ]]; then
-    AGENT_ENGINE_ID=$(python3 "${SCRIPT_DIR}/get_agent_engine.py" --agent-name "${AGENT_ENGINE_NAME}" --project-id "${GOOGLE_CLOUD_PROJECT}" --location "${GOOGLE_CLOUD_LOCATION}" | tail -1)
+    AGENT_ENGINE_ID=$(python3 "${SCRIPT_DIR}/get_agent_engine.py" --agent-name "${AGENT_ENGINE_NAME}" --project-id "${GOOGLE_CLOUD_PROJECT}" --location "${GOOGLE_CLOUD_REGION}" | tail -1)
     echo "AGENT_ENGINE_ID=\"${AGENT_ENGINE_ID}\"" >> ".env"
 fi
 
@@ -31,7 +31,7 @@ MCP_SERVICE_NAME="media-mcp"
 gcloud run deploy "${MCP_SERVICE_NAME}" \
   --source mcp \
   --project "${GOOGLE_CLOUD_PROJECT}" \
-  --region "${GOOGLE_CLOUD_LOCATION}" \
+  --region "${GOOGLE_CLOUD_REGION}" \
   --no-allow-unauthenticated \
   --clear-base-image \
   --set-env-vars GOOGLE_GENAI_USE_VERTEXAI="${GOOGLE_GENAI_USE_VERTEXAI}" \
@@ -41,7 +41,7 @@ gcloud run deploy "${MCP_SERVICE_NAME}" \
 
 MEDIA_MCP_SERVER_URL=$(gcloud run services describe "${MCP_SERVICE_NAME}" \
   --project "${GOOGLE_CLOUD_PROJECT}" \
-  --region "${GOOGLE_CLOUD_LOCATION}" \
+  --region "${GOOGLE_CLOUD_REGION}" \
   --format="value(status.url)")
 echo "MCP Server deployed at ${MEDIA_MCP_SERVER_URL}"
 
@@ -49,7 +49,7 @@ SERVICE_NAME="${AGENT_ENGINE_NAME//_/-}"
 echo "Deploying the agent to Cloud Run..."
 adk deploy cloud_run \
     --project="${GOOGLE_CLOUD_PROJECT}" \
-    --region="${GOOGLE_CLOUD_LOCATION}" \
+    --region="${GOOGLE_CLOUD_REGION}" \
     --service_name="${SERVICE_NAME}" \
     --app_name="video_avatar_agent" \
     --artifact_service_uri="gs://${AI_ASSETS_BUCKET}" \

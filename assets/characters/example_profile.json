@@ -1,0 +1,48 @@
+{
+  "profile_id": "dr_anya_capy_v1",
+  "display_name": "Dr Anya Capy",
+  "description": "Capybara scientist host with clean studio presentation style.",
+  "voice_profile": {
+    "tone": "calm",
+    "pace": "steady",
+    "delivery": "educational"
+  },
+  "locked_traits": [
+    "round capybara muzzle",
+    "white lab coat",
+    "small round glasses"
+  ],
+  "wardrobe_constraints": [
+    "white lab coat",
+    "blue shirt"
+  ],
+  "camera_guidance": "Use medium close-up and conversational two-shot framing.",
+  "canonical_views": [
+    {
+      "view_index": 1,
+      "uri": "gs://REPLACE_WITH_BUCKET/assets/video_avatar_agent/view1.jpeg",
+      "label": "front view",
+      "shot_hint": "opening frame"
+    },
+    {
+      "view_index": 2,
+      "uri": "gs://REPLACE_WITH_BUCKET/assets/video_avatar_agent/view2.jpeg",
+      "label": "left profile",
+      "shot_hint": "no zoom"
+    },
+    {
+      "view_index": 3,
+      "uri": "gs://REPLACE_WITH_BUCKET/assets/video_avatar_agent/view3.jpeg",
+      "label": "right profile",
+      "shot_hint": "reaction shots"
+    },
+    {
+      "view_index": 4,
+      "uri": "gs://REPLACE_WITH_BUCKET/assets/video_avatar_agent/view4.jpeg",
+      "label": "wide framing",
+      "shot_hint": "transitions"
+    }
+  ],
+  "policy_fallback_mode": "auto-fictionalize",
+  "version": 1
+}

@@ -50,6 +50,7 @@ using [Vertex AI Agent Engine Sessions Service](https://cloud.google.com/vertex-
 
 1. `generate_video` - uses [Veo 3.1](https://console.cloud.google.com/vertex-ai/publishers/google/model-garden/veo-3.1-generate-preview?utm_campaign=CDR_0xc245fc42_default_b456742732&utm_medium=external&utm_source=event) model to generate videos. It can use start and frame in addition to the text prompt.
 2. `generate_image` - uses [Gemini 3.1 Flash Image](https://docs.cloud.google.com/vertex-ai/generative-ai/docs/models/gemini/3-1-flash-image) (Nano Banana 2 🍌) to generate images.
+Model ID=gemini-3.1-flash-image-preview
    It can use source image as a reference. This tool is not used by the repo's agent.
 
 ## Prerequisites
@@ -95,6 +96,22 @@ using [Vertex AI Agent Engine Sessions Service](https://cloud.google.com/vertex-
 2. Update the `.env` file with your Google Cloud project ID, location, and the name of your GCS bucket for AI assets.
 
 ## Running Locally
+
+### Windows PowerShell (recommended on Windows)
+
+To start the MCP server run:
+
+```powershell
+.\deployment\run_mcp_local.ps1
+```
+
+To run the agent locally, use:
+
+```powershell
+.\deployment\run_agent_local.ps1
+```
+
+### Bash (Linux/macOS or Git Bash)
 
 To start the MCP server run:
 
@@ -145,6 +162,60 @@ This script will:
 
 4. Hit **Enter** key to submit the request.
    The agent will start converting the script and generating videos.
+
+### Persistent Character Profiles
+
+You can reuse a stored character profile by including a line in your prompt:
+
+```text
+CHARACTER_PROFILE_ID: dr_anya_capy_v1
+```
+
+The root agent loads canonical character views from GCS, selects the exact view
+assigned to each script chunk (`view_index` from the script sequencer), and
+injects it as the starting frame for that video chunk — keeping identity stable
+across all generated segments.
+
+#### Step 1 — Generate canonical views and bootstrap the profile
+
+Run the bootstrap script once. It generates 4 reference images for the character
+using the Gemini image model, uploads them to GCS, and saves the profile:
+
+```bash
+# Preview prompts only (no API calls)
+python deployment/bootstrap_character_views.py --dry-run
+
+# Generate images, upload, and save profile to GCS
+python deployment/bootstrap_character_views.py
+# or with a custom profile file:
+python deployment/bootstrap_character_views.py --profile-file assets/characters/example_profile.json
+```
+
+Outputs:
+
+```text
+PROFILE_ID=dr_anya_capy_v1
+PROFILE_URI=gs://<bucket>/character-profiles/dr_anya_capy_v1/profile.json
+```
+
+#### Step 2 — Use the profile in the agent
+
+In the ADK web UI or API, start your prompt with the profile ID line:
+
+```text
+CHARACTER_PROFILE_ID: dr_anya_capy_v1
+
+<your character description and script here>
+```
+
+#### Saving a manually-prepared profile
+
+If you have your own reference images already uploaded to GCS, update
+`assets/characters/example_profile.json` with the real URIs and run:
+
+```bash
+python deployment/save_character_profile.py --profile-file assets/characters/example_profile.json
+```
 
 ## License
 

@@ -4,3 +4,5 @@ google-cloud-storage
 google-genai==1.48.*
 httpx==0.28.*
 fastmcp==2.13.*
+moviepy>=2.0
+imageio-ffmpeg>=0.5

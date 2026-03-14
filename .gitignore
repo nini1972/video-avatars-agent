@@ -205,3 +205,6 @@ assets/raw
 
 #Ignore vscode AI rules
 .github\instructions\codacy.instructions.md
+
+# mcp/__init__.py makes mcp/ a Python package that shadows the installed mcp SDK
+mcp/__init__.py

@@ -21,8 +21,12 @@ cd "${SCRIPT_DIR}/.."
 source ".env"
 
 if [[ "${AGENT_ENGINE_ID}" == "" ]]; then
-    AGENT_ENGINE_ID=$(python3 "${SCRIPT_DIR}/get_agent_engine.py" --agent-name "${AGENT_ENGINE_NAME}" --project-id "${GOOGLE_CLOUD_PROJECT}" --location "${GOOGLE_CLOUD_LOCATION}" | tail -1)
+    AGENT_ENGINE_ID=$(python3 "${SCRIPT_DIR}/get_agent_engine.py" --agent-name "${AGENT_ENGINE_NAME}" --project-id "${GOOGLE_CLOUD_PROJECT}" --location "${GOOGLE_CLOUD_REGION}" | tail -1)
     echo "AGENT_ENGINE_ID=\"${AGENT_ENGINE_ID}\"" >> ".env"
 fi
+
+# Agent Engine session service requires a real region (not "global");
+# override GOOGLE_CLOUD_LOCATION with GOOGLE_CLOUD_REGION for this process.
+export GOOGLE_CLOUD_LOCATION="${GOOGLE_CLOUD_REGION}"
 
 adk web --port 8081 --artifact_service_uri gs://${AI_ASSETS_BUCKET} --session_service_uri agentengine://${AGENT_ENGINE_ID} ./agents

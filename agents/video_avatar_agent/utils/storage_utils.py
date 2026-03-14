@@ -15,13 +15,16 @@
 import hashlib
 import mimetypes
 import os
+from typing import List, Optional
 
 from google.api_core import exceptions
 import google.auth
 from google.genai import types
 from google.cloud.storage import Bucket, Client, Blob
+from pydantic import ValidationError
 
 from dotenv import load_dotenv
+from utils.character_profiles import CharacterProfile
 
 load_dotenv()
 
@@ -34,15 +37,14 @@ project_id = os.environ["GOOGLE_CLOUD_PROJECT"]
 storage_client = Client(project=os.environ.get("GOOGLE_CLOUD_PROJECT"))
 ai_bucket_name = os.environ.get(
     "AI_ASSETS_BUCKET",
-    f"{project_id}-adk-video-agent"
+    "image_ai_storage"
 )
 ai_bucket = storage_client.get_bucket(ai_bucket_name)
-md5_hash = hashlib.md5()
+CHARACTER_PROFILE_PREFIX = "character-profiles"
 
 
 async def upload_data_to_gcs(agent_id: str, data: bytes, mime_type: str) -> str:
-    md5_hash.update(data)
-    file_name = md5_hash.hexdigest()
+    file_name = hashlib.sha256(data).hexdigest()
     ext = mimetypes.guess_extension(mime_type) or ""
     file_name = f"{file_name}{ext}"
     blob_name = f"assets/{agent_id}/{file_name}"
@@ -67,3 +69,48 @@ def download_data_from_gcs(url: str) -> types.Blob:
         data=blob_data,
         mime_type=mime_type.strip()
     )
+
+
+def _profile_blob_name(profile_id: str) -> str:
+    return f"{CHARACTER_PROFILE_PREFIX}/{profile_id}/profile.json"
+
+
+def save_character_profile(profile: CharacterProfile) -> str:
+    blob_name = _profile_blob_name(profile.profile_id)
+    blob = Blob(bucket=ai_bucket, name=blob_name)
+    blob.upload_from_string(
+        profile.model_dump_json(indent=2),
+        content_type="application/json",
+        client=storage_client,
+    )
+    return f"gs://{ai_bucket_name}/{blob_name}"
+
+
+def load_character_profile(profile_id: str) -> Optional[CharacterProfile]:
+    blob_name = _profile_blob_name(profile_id)
+    blob = Blob(bucket=ai_bucket, name=blob_name)
+    try:
+        data = blob.download_as_text(client=storage_client)
+    except exceptions.NotFound:
+        return None
+    try:
+        return CharacterProfile.model_validate_json(data)
+    except ValidationError as err:
+        raise ValueError(f"Invalid character profile JSON for '{profile_id}': {err}")
+
+
+def list_character_profiles() -> List[str]:
+    prefix = f"{CHARACTER_PROFILE_PREFIX}/"
+    profile_ids = set()
+    for blob in storage_client.list_blobs(ai_bucket_name, prefix=prefix):
+        parts = blob.name.split("/")
+        if len(parts) >= 3 and parts[0] == CHARACTER_PROFILE_PREFIX:
+            profile_ids.add(parts[1])
+    return sorted(profile_ids)
+
+
+def resolve_profile_view_urls(profile: CharacterProfile) -> List[str]:
+    return [
+        view.uri
+        for view in sorted(profile.canonical_views, key=lambda item: item.view_index)
+    ]
